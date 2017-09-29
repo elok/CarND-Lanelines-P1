@@ -2,8 +2,6 @@
 
 ---
 
-**Finding Lane Lines on the Road**
-
 The goals / steps of this project are the following:
 * Make a pipeline that finds lane lines on the road
 * Reflect on your work in a written report
@@ -20,44 +18,31 @@ The goals / steps of this project are the following:
 
 ---
 
-### Reflection
+### 1. Pipeline Overview
 
-### 1. Describe your pipeline. As part of the description, explain how you modified the draw_lines() function.
+My pipeline consisted of 6 steps. First, I converted the images to grayscale, then I applied a guassian blur. With the noise reduced by the guassian blur, I applied the canny transform edge detection. Next a region of interest mask was used to remove edges we don't particulary care about. Now that we have the edges we care about, we run it through the hough lines process to connect the dots. Lastly, we draw the lines over the original image.
 
-My pipeline consisted of 5 steps. First, I converted the images to grayscale, then I .... 
-
-1. Grayscale
-2. Guassian blue
-3. Canny
-4. Region of interest
-5. Hough lines
-6. Merge image
-
-In order to draw a single line on the left and right lanes, I modified the draw_lines() function by ...
-
-1. Calculate slope
-2. Determine left or right side
-3. For each side, I do the following:
-    a. Calculate avg x1, y2, x2, y2
-	  b. Use the above to calculate the avg slope
-	  c. Use the above to calculate the b intercept b = y - m*x
-	  d. With the b intercept, slope, and any y coordinate I can calculate x using the formula: x = (y-b)/m
-4. The results were not bad but the lines would vary from frame to frame and would look jittery. I decided to 'smooth' the line by average the lines across frames. To do that, I did the following:
-	  a. Create a left and right queue and set a maximum number of frames to cache
-	  b. With nothing in the cache, i just return the line
-	  c. With something in the cache, i will average the current line with the lines in the cache
-
-If you'd like to include images to show how the pipeline works, here is how to include an image: 
+The following are the results of the pipeline over static images
 
 ![alt text][image1]
-![alt text][image2]
 ![alt text][image3]
-![alt text][image4]
-![alt text][image5]
-![alt text][image6]
+
+In order to draw a single line on the left and right lanes, I modified the draw_lines() function by doing the following:
+
+1. For each line, I first calculate slope by using formula (y2-y1)/(x2-x1)
+2. I then determine if the line belongs on the left or right side if it's greater than or less than zero
+3. Now for each side, I do the following:
+    a. Calculate the average x1, y2, x2, y2 using all the lines
+	  b. Then use the above to calculate the average slope using the same formula (y2-y1)/(x2-x1)
+	  c. Use the above to calculate the b intercept by using formula b = y-m*x
+	  d. With the b intercept, slope, and any y coordinate I can calculate x using the formula: x = (y-b)/m
+4. The results were not bad but the lines would vary from frame to frame and would look jittery. I decided to 'smooth' the line by averaging the lines across frames. To do that, I did the following:
+	  a. Create a left and right queue and set a maximum number of frames to cache
+	  b. With nothing in the cache, I just return the line
+	  c. With something in the cache, I will average the current line with the lines in the cache and return the average
 
 
-### 2. Identify potential shortcomings with your current pipeline
+### 2. Shortcomings
 
 One potential shortcoming would be what would happen when ... 
 Another shortcoming could be ...
@@ -66,7 +51,11 @@ Another shortcoming could be ...
 2. Horizontal hough lines. Had to tweak the region of interest.
 3. Jittery lines across frames in the video. Had to figure out how to cache previous frames used for averaging.
 
-### 3. Suggest possible improvements to your pipeline
+![alt text][image4]
+![alt text][image5]
+
+
+### 3. Improvements
 
 A possible improvement would be to ...
 Another potential improvement could be to ...
