@@ -22,7 +22,7 @@ The goals / steps of this project are the following:
 
 My pipeline consisted of 6 steps. First, I converted the images to grayscale, then I applied a guassian blur. With the noise reduced by the guassian blur, I applied the canny transform edge detection. Next a region of interest mask was used to remove edges we don't particulary care about. Now that we have the edges we care about, we run it through the hough lines process to connect the dots. Lastly, we draw the lines over the original image.
 
-The following are the results of the pipeline over static images
+The following are the results of the pipeline over static images:
 
 ![alt text][image1]
 ![alt text][image3]
@@ -44,21 +44,14 @@ In order to draw a single line on the left and right lanes, I modified the draw_
 
 ### 2. Shortcomings
 
-One potential shortcoming would be what would happen when ... 
-Another shortcoming could be ...
-
-1. Tweaking parameters for canny and hough lines.
-2. Horizontal hough lines. Had to tweak the region of interest.
-3. Jittery lines across frames in the video. Had to figure out how to cache previous frames used for averaging.
-
-![alt text][image4]
-![alt text][image5]
-
+* I found it difficult to determine the 'perfect' parameters for the canny and hough lines functions. Sometimes tweaking a parameter would produce better results with the static images but worse results with the video. I took a more conservative approach and would scale back the parameters to have more 'confident' lines knowing that they might be too short. The following are two examples:
+  * ![alt text][image4]
+  * ![alt text][image5]
+* Another shortcoming are jittery lines across frames in the video. I had a hard time deciding how to fix this. I decided to use a queue as a cache for previous frames used for averaging. This turned out to work pretty well.
+* The challenge video was indeed challenging -- I noticed the hood is visible and generating horizontal hough lines however, I couldn't remove them without affecting the other videos.
 
 ### 3. Improvements
 
-A possible improvement would be to ...
-Another potential improvement could be to ...
-
-1. Perhaps using the same logic across different color channels and then averaging them.
-2. Instead of extrapolating a straight line, perhaps we can fit to a polynomial line to take into account curve lane lines.
+* Perhaps I could run the same pipeline across different color channels and then average them. I'm wondering if other color channels would provide me with better results in tougher situations like shadows.
+* Instead of extrapolating a straight line, perhaps we can fit to a polynomial line to take into account curve lane lines.
+* I wish I could better determine the region of interest dynamically. For example, the region of interest for the challenge video is different but I've somewhat hardcoded for the other two videos.
